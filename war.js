@@ -5,11 +5,6 @@ class Card{
         this.symbol = symbol;
         this.score = score;
     }
-
-    displayCard()
-    {
-        console.log(`CARD INFO: Rank: ${this.rank} | Symbol: ${this.symbol}`)
-    }
 }
 
 class Deck{
@@ -49,7 +44,79 @@ class Player{
 
     draw()
     {
-        return deck.pop();
+        let card = deck.pop()
+        console.log(`${this.name} drew a ${card.rank} of ${card.symbol}`) 
+        return card;
+    }
+
+    warDraw()
+    {
+        let cards = this.deck.splice(this.deck.length - 4);
+        console.log(`${this.name}'s fourth card: ${card.rank} of ${card.symbol}`);
+        return cards;
+    }
+}
+
+class Game
+{
+    constructor(player1, player2)
+    {
+        this.player1 = player1;
+        this.player2 = player2;
+    }
+
+    startGame()
+    {
+        while(this.player1.deck.length > 0 || this.player2.deck.length > 0)
+        {
+            this.startRound();
+        }
+        if(this.player1.deck.length <= 0)
+            console.log(`${this.player1.name} has won the game!`)
+        else
+            console.log(`${this.player2.name} has won the game!`)
+
+    }
+
+    startRound()
+    {
+        let p1Card = this.player1.draw();
+        let p2Card = this.player2.draw();
+        
+        if(p1Card.score === p2Card.score)
+        {
+            console.log("WAR!")
+            this.startWar()
+        }
+        else if(p1Card.score > p2Card.score)
+        {
+            console.log(`Winner: ${this.player1.name} Card Played: ${p1Card.rank} | ${p1Card.symbol}`)
+            this.p1.deck.push(p1Card, p2Card)
+        }else{
+            console.log(`Winner: ${this.player2.name} Card Played: ${p2Card.rank} | ${p2Card.symbol}`)
+            this.p2.deck.push(p2Card, p1Card)
+        }
+    }
+
+    startWar()
+    {
+        let player1FourCards = this.player1.warDraw();
+        let player2FourCards = this.player2.warDraw();
+        let prizeCards = [...player1FourCards, ...player2FourCards]
+
+        while(player1FourCards[3].score === player2FourCards[3].score)
+        {
+            player1FourCards = this.player1.warDraw();
+            player2FourCards = this.player2.warDraw();
+            prizeCards.push(...player1FourCards, ...player2FourCards)
+        }
+
+        if(player1FourCards[3].score > player2FourCards[3].score)
+        {
+            player1.deck.push(prizeCards)
+        }else{
+            player2.deck.push(prizeCards)
+        }
     }
 }
 
@@ -76,26 +143,3 @@ console.log("Player 1's deck")
 console.log(player1.deck)
 console.log("Player 2's deck")
 console.log(player2.deck)
-
-// Have array of ranks
-
-// Have array of symbols
-
-
-while(player1.deck.length != 0 || player2.deck.length != 0)
-{
-    let player1Card = player1.draw();
-    let player2Card = player2.draw();
-
-    let player1Score = player1Card.score;
-    let player2Score = player2Card.score;
-
-    if(player1Score === player2Score)
-        // War
-    else if(player1Score > player2Score)
-        // Add cards to player1
-        player1.deck.push(player1Card)
-    else   
-        // Add cards to player2
-        player2.deck.push(player2Card)
-}
