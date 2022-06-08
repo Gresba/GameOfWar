@@ -1,3 +1,7 @@
+/**
+* 
+*/
+
 class Card{
     constructor(rank, symbol, score)
     {
@@ -110,19 +114,31 @@ class Game
                 this.startWar(p1Card, p2Card)
             else{
                 if(p1Deck.length < 4)
+                {
+                    console.log(`${this.player1.name} did not have enough cards to start a war so he lost!`)
                     this.winner = this.player2;
-                else
+                    this.player2.deck = [...this.player1.deck, p1Card, p2Card, ...this.player2.deck]
+                    this.player1.deck = []
+                }else{
+                    console.log(`${this.player2.name} did not have enough cards to start a war so he lost!`)
                     this.winner = this.player1
+                    this.player1.deck = [...this.player2.deck, p2Card, p1Card, ...this.player1.deck]
+                    this.player2.deck = []
+                }
             }
         }
         else if(p1Card.score > p2Card.score)
         {
             console.log(`Winner: ${this.player1.name} Card Played: ${p1Card.rank} | ${p1Card.symbol}`)
+            console.log("")
             p1Deck.unshift(p1Card, p2Card)
         }else{
             console.log(`Winner: ${this.player2.name} Card Played: ${p2Card.rank} | ${p2Card.symbol}`)
             p2Deck.unshift(p2Card, p1Card)
         }
+        console.log("")
+        console.log(`${this.player1.name} has ${this.player1.deck.length} cards left`)
+        console.log(`${this.player2.name} has ${this.player2.deck.length} cards left`)
         console.log("---------------------------------------")
         console.log("")
     }
@@ -141,38 +157,40 @@ class Game
             console.log(`${this.player2.name} has ${this.player2.deck.length} cards left`)
             if(this.player1.deck.length >= 4 && this.player2.deck.length >= 4)
             {
-                console.log(`Prize Cards: ${prizeCards}`)
                 player1FourCards = this.player1.warDraw();
                 player2FourCards = this.player2.warDraw();
-                console.log(player1FourCards)
-                console.log(player2FourCards)
                 prizeCards = [...prizeCards, ...player1FourCards, ...player2FourCards]
             }else{
                 if(this.player1.length >= 4)
                 {
                     console.log(`${this.player2.name} did not have enough cards for a war`)
                     this.winner = this.player1
+                    this.player1.deck = [...this.player2.deck, ...prizeCards, this.player1.deck]
+                    this.player2.deck = [];
                 }
                 else
                 {
                     console.log(`${this.player1.name} did not have enough cards for a war`)
-                    this.winner = this.player2
+                    this.winner = this.player1
+                    this.player2.deck = [...this.player1.deck, ...prizeCards, this.player2.deck]
+                    this.player1.deck = [];
                 }
             }
         }
 
-        if(this.winner === undefined)
+        if(player1FourCards[3].score > player2FourCards[3].score)
         {
-            if(player1FourCards[3].score > player2FourCards[3].score)
-            {
-                this.player1.deck = [...prizeCards, ...this.player1.deck]
-                console.log("Player 1 Deck:")
-                console.log(this.player1.deck)
-            }else{
-                this.player2.deck = [...prizeCards,...this.player2.deck]
-                console.log("Player 2 Deck:")
-                console.log(this.player2.deck)
-            }
+            console.log(prizeCards.length)
+            console.log(this.player1.deck.length)
+            this.player1.deck = [...prizeCards, ...this.player1.deck]
+            console.log(this.player1.deck.length)
+        }
+        else if(player2FourCards[3].score > player1FourCards[3].score)
+        {
+            console.log(prizeCards.length)
+            console.log(this.player2.deck.length)
+            this.player2.deck = [...prizeCards, ...this.player2.deck]
+            console.log(this.player2.deck.length)
         }
     }
 }
