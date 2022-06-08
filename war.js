@@ -53,8 +53,8 @@ class Player{
     warDraw()
     {
         let cards = this.deck.splice(this.deck.length - 4);
-        console.log(cards)
         console.log(`${this.name}'s fourth card: ${cards[3].rank} of ${cards[3].symbol}`);
+        console.log(cards)
         return cards;
     }
 }
@@ -84,11 +84,13 @@ class Game
             roundNumber++;
         }
         if(this.winner !== undefined)
+        {
             console.log(`${this.winner.name} has won the game!`)    
+        }
         else if(this.player1.deck.length <= 0)
-            console.log(`${this.player1.name} has won the game!`)
-        else if(this.player2.deck.length <=0)
             console.log(`${this.player2.name} has won the game!`)
+        else if(this.player2.deck.length <= 0)
+            console.log(`${this.player1.name} has won the game!`)
         console.log("-------------------------------------")
         console.log("")
     }
@@ -134,7 +136,10 @@ class Game
         console.log(prizeCards)
         while(this.winner === undefined && (player1FourCards[3].score === player2FourCards[3].score))
         {
-            if(this.player1.length >= 4 && this.player2.length >= 4)
+            console.log("Double War")
+            console.log(`${this.player1.name} has ${this.player1.deck.length} cards left`)
+            console.log(`${this.player2.name} has ${this.player2.deck.length} cards left`)
+            if(this.player1.deck.length >= 4 && this.player2.deck.length >= 4)
             {
                 console.log(`Prize Cards: ${prizeCards}`)
                 player1FourCards = this.player1.warDraw();
@@ -144,9 +149,15 @@ class Game
                 prizeCards = [...prizeCards, ...player1FourCards, ...player2FourCards]
             }else{
                 if(this.player1.length >= 4)
+                {
+                    console.log(`${this.player2.name} did not have enough cards for a war`)
                     this.winner = this.player1
+                }
                 else
+                {
+                    console.log(`${this.player1.name} did not have enough cards for a war`)
                     this.winner = this.player2
+                }
             }
         }
 
