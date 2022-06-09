@@ -14,10 +14,9 @@ class Card {
   /**
    * Constructor of the Card class to initalize an instance of the Card object
    *
-   * @params
-   * - rank: A string to determine the rank of the card
-   * - symbol: A symbol to determine the type of card
-   * - score: A score which will be used to determine which card is higher than another
+   * @params {string} rank A string to determine the rank of the card
+   * @params {string} symbol A symbol to determine the type of card
+   * @params {number} score A score which will be used to determine which card is higher than another
    */
   constructor(rank, symbol, score) {
     this.rank = rank;
@@ -202,20 +201,20 @@ class Game {
 
       // Check if both players have enough cards to go into war  
       if (p1Deck.length >= 4 && p2Deck.length >= 4)
-        this.startWar(p1Card, p2Card)
+        this.startWar(p1Card, p2Card);
       else {
         
         // Figure out which player doesn't have enough cards and declare the winner  
         if (p1Deck.length < 4) {
-          console.log(`${this.player1.name} did not have enough cards to start a war so he lost!`)
-          this.player2.deck = [...this.player1.deck, p1Card, p2Card, ...this.player2.deck]
+          console.log(`${this.player1.name} did not have enough cards to start a war so he lost!`);
+          this.player2.deck.unshift(...this.player1.deck, p1Card, p2Card);
           this.winner = this.player2;
-          this.player1.deck = []
+          this.player1.deck = [];
         } else {
-          console.log(`${this.player2.name} did not have enough cards to start a war so he lost!`)
-          this.winner = this.player1
-          this.player1.deck = [...this.player2.deck, p2Card, p1Card, ...this.player1.deck]
-          this.player2.deck = []
+          console.log(`${this.player2.name} did not have enough cards to start a war so he lost!`);
+          this.winner = this.player1;
+          this.player1.deck.unshift(...this.player2.deck, p2Card, p1Card);
+          this.player2.deck = [];
         }
       }
     }
@@ -224,7 +223,10 @@ class Game {
     else {
         let roundWinner = this.getRoundWinner(p1Card, p2Card);
         console.log(`Winner: ${roundWinner.name}`);
-        roundWinner.deck.unshift(p2Card, p1Card);
+        if(roundWinner === this.player1)
+            roundWinner.deck.unshift(p1Card, p2Card)
+        else
+            roundWinner.deck.unshift(p2Card, p1Card)
     }
 
     // Print out the information about the players' decks  
@@ -260,7 +262,7 @@ class Game {
       if (this.player1.deck.length >= 4 && this.player2.deck.length >= 4) {
         player1FourCards = this.player1.warDraw();
         player2FourCards = this.player2.warDraw();
-        prizeCards = [...prizeCards, ...player1FourCards, ...player2FourCards]
+        prizeCards.push(...player1FourCards, ...player2FourCards);
 
       /**
        * If one of the players don't have enough cards then figure out which player.    
@@ -268,24 +270,27 @@ class Game {
        * Clear the losing player's deck.
        */
       } else {
-        if (this.player1.length >= 4) {
+        if (this.player1.deck.length >= 4) {
           console.log(`${this.player2.name} didn't have enough cards and lost. All cards have been given to the other player`)
           this.winner = this.player1
-          this.player1.deck = [...this.player2.deck, ...prizeCards, ...this.player1.deck]
+          this.player1.deck.unshift(...this.player2.deck, ...prizeCards)
           this.player2.deck = [];
         }
         else {
           console.log(`${this.player1.name} didn't have enough cards and last. All cards have been given to the other player`)
-          this.winner = this.player1
-          this.player2.deck = [...this.player1.deck, ...prizeCards, ...this.player2.deck]
+          this.winner = this.player2
+          this.player2.deck.unshift(...this.player1.deck, ...prizeCards)
           this.player1.deck = [];
         }
       }
     }
    
-    // Get the player with the higher fourth card and add all the cards to their deck   
-    let roundWinner = getRoundWinner(player1FourCards[3], player2FourCards[3]);
-    roundWinner.deck = [...prizeCards, ...roundWinner.deck];  
+    // If there is not a winner, get the player with the higher fourth card and add all the cards to their deck   
+    if(!this.winner)
+    {
+        let roundWinner = this.getRoundWinner(player1FourCards[3], player2FourCards[3]);
+        roundWinner.deck.unshift(...prizeCards);  
+    }
   }
 
   /**
