@@ -44,8 +44,8 @@ class Deck {
    * Declares and initializes the ranks and symbol arrays to all the possible ranks and symbols that a card can have
    */
   constructor() {
-    this.ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"];
-    this.symbols = ["Diamonds", "Clubs", "Hearts", "Spades"];
+    this.ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+    this.symbols = ["♦", "♣", "♥", "♠"];
     this.deck = this.generateDeck();
   }
 
@@ -106,7 +106,7 @@ class Player {
   draw() {
     // Get the card at the top
     this.drawnCard = this.deck.pop();
-    console.log(`${this.name} drew a ${this.drawnCard.rank} of ${this.drawnCard.symbol}`)
+    this.drawCard(this.drawnCard.symbol, this.drawnCard.rank)
   }
 
   /**
@@ -118,8 +118,21 @@ class Player {
     let cards = this.deck.splice(this.deck.length - 4);
 
     // Prints out information about the card
-    console.log(`${this.name}'s fourth card: ${cards[3].rank} of ${cards[3].symbol}`);
+    this.drawCard(this.drawnCard.symbol, this.drawnCard.rank)
     return cards;
+  }
+
+  drawCard(dCS, dCR) {
+    console.log(`${this.name}'s card
+  _____________
+  |${dCS}         ${dCS}|
+  |           |
+  |           |
+  |     ${dCR}     |
+  |           |
+  |           |
+  |${dCS}         ${dCS}|
+  -------------`);
   }
 }
 
@@ -168,10 +181,8 @@ class Game {
      */
     while (this.winner === undefined && this.player1.deck.length > 0 && this.player2.deck.length > 0) {
       // Prints out information about a round and the player's state
-      console.log("----------------------------------------")
-      console.log(`Round Number: ${this.currentRound}`)
-      console.log(`Player 1 Deck Length: ${this.player1.deck.length}`)
-      console.log(`Player 2 Deck Length: ${this.player2.deck.length}`)
+      console.log("=====================================");
+      console.log(`[Round #${this.currentRound}]:`)
       this.startRound();
 
       // Starting another round
@@ -180,12 +191,12 @@ class Game {
 
     // Game has ended now figure out why
     if (this.winner)
-      console.log(`${this.winner.name} has won the game!`)
+      console.log(`[WINNER] ${this.winner.name} has won the game!`)
     else if (this.player1.deck.length <= 0)
-      console.log(`${this.player2.name} has won the game!`)
+      console.log(`[WINNER] ${this.player2.name} has won the game!`)
     else if (this.player2.deck.length <= 0)
-      console.log(`${this.player1.name} has won the game!`)
-    console.log("-------------------------------------")
+      console.log(`[WINNER] ${this.player1.name} has won the game!`)
+    console.log("===================================");
     console.log("")
   }
 
@@ -234,7 +245,7 @@ class Game {
     // Normal round. Figure out the winner, then give the winner the cards
     else {
       let roundWinner = this.getRoundWinner(player1.drawnCard, player2.drawnCard);
-      console.log(`Winner: ${roundWinner[0].name}`);
+      console.log(`[Winner] ${roundWinner[0].name}`);
       roundWinner[0].deck.unshift(roundWinner[0].drawnCard, roundWinner[1].drawnCard);
     }
 
@@ -242,7 +253,6 @@ class Game {
     console.log("")
     console.log(`${player1.name} has ${player1.deck.length} cards left`)
     console.log(`${player2.name} has ${player2.deck.length} cards left`)
-    console.log("---------------------------------------")
     console.log("")
   }
 
