@@ -121,7 +121,12 @@ class Player {
     this.drawCard(this.drawnCard.symbol, this.drawnCard.rank)
     return cards;
   }
-
+  /**
+   * Creates a visual of what he card looks like
+   *
+   * @param {string} dCS The symbol of the card
+   * @param {string} dCR The rank of the card
+   */
   drawCard(dCS, dCR) {
     console.log(`${this.name}'s card
   _____________
