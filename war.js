@@ -7,7 +7,7 @@
  * - score: The score which will be used to see if a card is high than another (Ex. 1, 4, 9, 13)
  *
  * Functions
- * - constuctor(): Initializes the card class with the information passed in as an argument*
+ * - constructor(): Initializes the card class with the information passed in as an argument*
 */
 
 class Card {
