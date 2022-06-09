@@ -52,8 +52,7 @@ class Deck {
   /**
    * Generates a deck of cards by looping through the ranks and symbols and created every possible combination possible
    *
-   * @returns
-   * Returns an array of unique cards
+   * @returns {Card[]} Returns an array of unique cards
    */
   generateDeck() {
     let newDeck = [];
@@ -68,8 +67,7 @@ class Deck {
   /**
    * Hands out a random card to a player using a randomizer. 
    *
-   * @params
-   * - player: The player to give a card to
+   * @params {Player} player The player to give a card to
    */
   handOut(player) {
     // Picks a random 
@@ -92,6 +90,8 @@ class Deck {
 class Player {
   /**
    * Initializes an instance of the Player class
+   * 
+   * @param {string} name The name of the player
    */
   constructor(name) {
     // Setting the properties
@@ -142,9 +142,8 @@ class Game {
   /**
    * Declare and initialize the properties of the Game class
    *
-   * @params
-   * - player1: The first player
-   * - player2: The second player
+   * @param player1 The first player
+   * @param player2 The second player
    */
   constructor(player1, player2) {
     // Set the players
@@ -241,9 +240,8 @@ class Game {
    * Start a war and pass the cards to the winning player
    * Figure out if a player also does not have enough cards
    *
-   * @params
-   * - card1: Player 1's original card
-   * - card2: Player 2's original card
+   * @param {Card} card1 Player 1's original card
+   * @param {Card} card2 Player 2's original card
    */
   startWar(card1, card2) {
     
@@ -296,12 +294,9 @@ class Game {
   /**
    * Compare the card scores and return the winning player
    * 
-   * @params
-   * - card1: Player 1's card
-   * - card2: Player 2's card
-   * 
-   * @returns
-   * The round winning player
+   * @param {Card} card1 Player 1's card
+   * @param {Card} card2 Player 2's card
+   * @returns {Player} The round winning player
    */
   getRoundWinner(card1, card2)
   {
